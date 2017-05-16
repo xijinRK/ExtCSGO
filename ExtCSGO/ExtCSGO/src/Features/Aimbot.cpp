@@ -124,11 +124,11 @@ namespace ExtCSGO::Features
 			vec3 Smoothed;
 			if (Smoothed.x != PixelAngles.x && std::abs(PixelAngles.x) > std::abs(PixelAngles.y))
 			{
-				Smoothed.x = Smoothed.x < PixelAngles.x ? Smoothed.x += 2 : (Smoothed.x > PixelAngles.x ? Smoothed.x -= 2 : Smoothed.x = PixelAngles.x);
+				Smoothed.x = Smoothed.x < PixelAngles.x ? Smoothed.x += 1 : (Smoothed.x > PixelAngles.x ? Smoothed.x -= 1 : Smoothed.x = PixelAngles.x);
 			}
 			else if (Smoothed.y != PixelAngles.y)
 			{
-				Smoothed.y = Smoothed.y < PixelAngles.y ? Smoothed.y += 2 : (Smoothed.y > PixelAngles.y ? Smoothed.y -= 2 : Smoothed.y = PixelAngles.y);
+				Smoothed.y = Smoothed.y < PixelAngles.y ? Smoothed.y += 1 : (Smoothed.y > PixelAngles.y ? Smoothed.y -= 1 : Smoothed.y = PixelAngles.y);
 			}
 			static auto TickCount = GetTickCount();
 			if (GetTickCount() - TickCount >= Smooth - 1)
