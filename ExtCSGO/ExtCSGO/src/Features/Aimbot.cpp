@@ -42,13 +42,13 @@ namespace ExtCSGO::Features
 	}
 
 	bool Aimbot::GetTargetAngles (
-		const vec3 &	ViewAngles,
-		vec3*			BestAngles,
-		float*			AimFov) const
+		const vec3 &    ViewAngles,
+		vec3*           BestAngles,
+		float*          AimFov) const
 	{
 		static float	BestFov = 180.f;
 		static Player	LocalPlayer, Enemy;
-		int				BestIndex = -1;
+		int             BestIndex = -1;
 
 		m_EntList->GetClientEntity(m_IVEngine->GetLocalPlayer(), &LocalPlayer);
 		if (!LocalPlayer.IsValid())
@@ -75,7 +75,6 @@ namespace ExtCSGO::Features
 			if (Fov < BestFov)
 			{
 				BestFov = Fov;
-
 				BestIndex = i;
 				*BestAngles = AimAngles;
 			}		
@@ -93,9 +92,9 @@ namespace ExtCSGO::Features
 	}
 
 	vec3 Aimbot::GetAimAngles(
-		const int &		BoneId,
-		const Player&	Local,
-		const Player&	Entity) const
+		const int &     BoneId,
+		const Player&   Local,
+		const Player&   Entity) const
 	{
 		vec3 AimAngles, BoneCoords;
 		BoneCoords = m_EntList->GetBonePosition(BoneId, Entity);
