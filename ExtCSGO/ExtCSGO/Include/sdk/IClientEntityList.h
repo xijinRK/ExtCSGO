@@ -1,22 +1,33 @@
 #pragma once
-
+#include <vector>
+#include "..\Maths\Vector.h"
 
 namespace ExtCSGO
 {
 	class Engine;
 	class vec3;
 }
+
 namespace ExtCSGO::sdk
 {
 	class Player;
+
+	struct s_matrix3x4
+	{
+		matrix3x4_t Matrix;
+	};
+
 	class IClientEntityList
 	{
-		const Engine *m_Engine;
+		Player*        m_Entity;
+		s_matrix3x4*   m_Matrix;
 	public:
-		IClientEntityList(const Engine *engine);
+		IClientEntityList();
 		~IClientEntityList();
 
-		vec3 GetBonePosition(const int & Index, const Player& player) const;
-		bool GetClientEntity(const int & Index, Player* Entity) const;
+		vec3 GetHeadBone(const int & Index) const;
+		Player* GetClientEntity(const int & Index) const;
+
+		void Update(const Engine *engine) const;
 	};
 }

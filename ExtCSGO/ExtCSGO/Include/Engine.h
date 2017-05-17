@@ -13,8 +13,12 @@ namespace ExtCSGO
 	{
 		Process*           m_Process;
 sdk::   IClientEntityList* m_IClientEntity;
+sdk::   IVEngineClient*    m_IVEngineClient;
 		Module*            m_ClientDLL;
 		Module*            m_EngineDLL;
+
+
+
 	public:
 		Engine();
 		~Engine();
@@ -27,6 +31,7 @@ sdk::   IClientEntityList* m_IClientEntity;
 		bool GetIVEngine(sdk::IVEngineClient** IVEngine) const;
 
 		void		Update() const;
+		void		UpdateEvents();
 		bool		IsValid() const;
 	private:
 		bool		IsHandleValid() const;

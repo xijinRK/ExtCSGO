@@ -1,5 +1,5 @@
 #include "sdk\Player.h"
-#include "Netvars.h"
+
 namespace ExtCSGO::sdk
 {
 	int Player::GetHealth() const 

@@ -5,27 +5,43 @@ namespace ExtCSGO
 {
 	using namespace Features;
 	Update::Update(char* argv[]):
-		m_Engine(new Engine()),
-		m_Aimbot(new Aimbot(std::atoi(argv[1]), std::atof(argv[2]), std::atoi(argv[3]), std::atof(argv[4]), m_Engine))
+		m_Aimbot(new Aimbot(std::atoi(argv[1]), std::atof(argv[2]), std::atoi(argv[3]), std::atof(argv[4]), this)),
+		m_Running(false)
 	{
 	}
 
 	Update::~Update()
 	{
 		delete m_Aimbot;
-		delete m_Engine;
 	}
 
-	int Update::Run() const
+	int Update::Run()
 	{
-		bool Running = false;
+		CreateThread(0, 0, (LPTHREAD_START_ROUTINE)UpdateThread, (Update*)this, 0, 0);
 		while (true)
 		{
-			if (Running == true)
+			Sleep(1);
+			if (m_Running == true)
 			{
-				if (m_Engine->IsValid())
+				if (Engine::IsValid())
 				{
 					m_Aimbot->Run();		
+				}
+			}
+		}
+		return 0;
+	}
+
+	void UpdateThread(Update* update)
+	{
+		while (true)
+		{
+			Sleep(1);
+			if (update->m_Running == true)
+			{ 
+				if (update->Engine::IsValid())
+				{
+					update->Engine::UpdateEvents();
 				}
 				else
 				{
@@ -33,15 +49,13 @@ namespace ExtCSGO
 					#else
 					Sleep(5000);
 					#endif
-					m_Engine->Update();
+					update->Engine::Update();
 				}
 			}
 			if (GetAsyncKeyState(VK_INSERT) & 1)
 			{
-				Running = !Running;
+				update->m_Running = !update->m_Running;
 			}
-			Sleep(1);
 		}
-		return 0;
-	}	
+	}
 }

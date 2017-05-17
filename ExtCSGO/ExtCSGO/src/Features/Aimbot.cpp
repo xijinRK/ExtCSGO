@@ -13,6 +13,7 @@ namespace ExtCSGO::Features
 		m_Sensitivity(Sensitivity),
 		m_Engine(Engine)
 	{
+		ResetTarget();
 	}
 
 	Aimbot::~Aimbot()
@@ -29,84 +30,89 @@ namespace ExtCSGO::Features
 			if (!m_Engine->GetClient(&m_EntList))
 				return;
 
-			vec3 AimAngles; float Fov;
-			if (!GetTargetAngles(m_IVEngine->GetViewAngles(), &AimAngles, &Fov))
+			auto LocalPlayer = m_EntList->GetClientEntity(m_IVEngine->GetLocalPlayer());
+			if (!LocalPlayer->IsValid())
 				return;
+			
+			if (!GetBestTarget(LocalPlayer, m_IVEngine->GetViewAngles(), &m_BestTarget, &m_BestIndex, &m_BestFov))
+			{
+				ResetTarget();
+				return;
+			}
 
-			if (Fov < (float)m_AimFov)
+			auto & AimAngles = GetAimAngles(LocalPlayer, m_BestTarget, m_BestIndex);
+			if (m_BestFov < (float)m_AimFov)
 			{
 				PixelMove(m_IVEngine->GetViewAngles(), AimAngles, (float)m_Sensitivity, m_AimSmooth);
-			}
-			
+			}		
 		}
+
 	}
 
-	bool Aimbot::GetTargetAngles (
-		const vec3 &	ViewAngles,
-		vec3*			BestAngles,
-		float*			AimFov) const
+	void Aimbot::ResetTarget()
 	{
-		static float	BestFov = 180.f;
-		static Player	LocalPlayer, Enemy;
-		int				BestIndex = -1;
+		m_BestTarget = nullptr;
+		m_BestIndex = -1;
+		m_BestFov = 180.f;
+	}
 
-		m_EntList->GetClientEntity(m_IVEngine->GetLocalPlayer(), &LocalPlayer);
-		if (!LocalPlayer.IsValid())
-		{
-			return false;
-		}
-
+	bool Aimbot::GetBestTarget (
+		const sdk::Player*  LocalPlayer,
+		const vec3 &        ViewAngles,
+		sdk::Player**       Target,
+		int*                Index,
+		float*              BestFov) const
+	{
 		for (auto i = 1; i < 32; i++)
 		{
-			if (!m_EntList->GetClientEntity(i, &Enemy))
+            auto Enemy = m_EntList->GetClientEntity(i);
+			if (!Enemy->IsValid())
 				continue;
 
-			if (!Enemy.IsValid())
-				continue;
-			
-			if (Enemy.GetTeamNum() == LocalPlayer.GetTeamNum())
+			if (Enemy->GetTeamNum() == LocalPlayer->GetTeamNum())
 				continue;
 
-			auto AimAngles = GetAimAngles(8, LocalPlayer, Enemy);
-
+			auto & AimAngles = GetAimAngles(LocalPlayer, Enemy, i);
 			
 			auto Fov = GetFov(ViewAngles, AimAngles);
 
-			if (Fov < BestFov)
+			if (Fov < *BestFov)
 			{
-				BestFov = Fov;
-
-				BestIndex = i;
-				*BestAngles = AimAngles;
+				*BestFov = Fov;
+				*Target = Enemy;
+				*Index = i;
 			}		
 		}
-		if (BestIndex == -1)
+		auto & target = *Target;
+		if (target != nullptr)
 		{
-			BestFov = 180.f;
-			*BestAngles = 0.f;
+			if (!target->IsValid())
+			{
+				return false;
+			}
+		}
+		else
+		{
 			return false;
 		}
-		*AimFov = BestFov;
-
-
-		return (BestFov < 180.f);
+		return true;
 	}
 
 	vec3 Aimbot::GetAimAngles(
-		const int &		BoneId,
-		const Player&	Local,
-		const Player&	Entity) const
+		const Player*	Local,
+		const Player*	Entity,
+		const int &     Index) const
 	{
 		vec3 AimAngles, BoneCoords;
-		BoneCoords = m_EntList->GetBonePosition(BoneId, Entity);
-		BoneCoords -= Local.GetEyePosition();
+		BoneCoords = m_EntList->GetHeadBone(Index);
+		BoneCoords -= Local->GetEyePosition();
 
 		VectorNormalize(BoneCoords);
 		VectorAngles(BoneCoords, AimAngles);
 
-		if (Local.GetShotsFired() > 1)
+		if (Local->GetShotsFired() > 1)
 		{
-			AimAngles -= Local.GetVecPunch() * 2.0f;
+			AimAngles -= Local->GetVecPunch() * 2.0f;
 		}
 		ClampAngles(AimAngles);
 		return AimAngles;

@@ -5,54 +5,59 @@
 namespace ExtCSGO::sdk
 {
 
-	IClientEntityList::IClientEntityList(const Engine *engine):
-		m_Engine(engine)
+	IClientEntityList::IClientEntityList() : 
+		m_Entity(new Player[32]),
+		m_Matrix(new s_matrix3x4[32])
 	{
-
 	}
 
 	IClientEntityList::~IClientEntityList()
 	{
+		delete m_Matrix;
+		delete m_Entity;
 	}
 
-	vec3 IClientEntityList::GetBonePosition(const int & Index, const Player & player) const
+	vec3 IClientEntityList::GetHeadBone(const int & Index) const
 	{
-		static matrix3x4_t Matrix;
-		if (!m_Engine->GetProcess()->ReadMemory
-		(
-			(PVOID)((DWORD64)player.GetdwBoneMatrix() + Index * 0x30),
-			&Matrix, sizeof(matrix3x4_t)
-		))
-		{
-			return vec3(0.f, 0.f, 0.f);
-		}
-		return vec3(Matrix[0][3], Matrix[1][3], Matrix[2][3]);
+		return vec3(m_Matrix[Index].Matrix[0][3], m_Matrix[Index].Matrix[1][3], m_Matrix[Index].Matrix[2][3]);
 	}
 
-	bool IClientEntityList::GetClientEntity(const int & Index, Player* Entity) const
+	Player* IClientEntityList::GetClientEntity(const int & Index) const
 	{
-		static DWORD Ptr = 0;
-		if (!m_Engine->GetProcess()->ReadMemory
-		(
-			(PVOID)((DWORD64)m_Engine->GetClientDLL()->GetdwBaseAddress() + m_EntityList + Index * 0x10),
-			&Ptr, sizeof(DWORD)
-		))
-		{
-			return false;
-		}
-
-		Player Ent;
-		if (!m_Engine->GetProcess()->ReadMemory
-		(
-			(PVOID)((DWORD64)Ptr),
-			&Ent, sizeof(Player)
-		))
-		{
-			return false;
-		}
-		*Entity = Ent;
-
-		return (Entity > nullptr);
+		return &m_Entity[Index];
 	}
-	
+
+	void IClientEntityList::Update(const Engine *engine) const
+	{
+		for (int i = 0; i < 32; i++)
+		{
+			static DWORD Ptr = 0;
+			if (!engine->GetProcess()->ReadMemory
+			(
+				(PVOID)((DWORD64)engine->GetClientDLL()->GetdwBaseAddress() + m_EntityList + i * 0x10),
+				&Ptr, sizeof(DWORD)
+			))
+			{
+				continue;
+			}
+
+			if (!engine->GetProcess()->ReadMemory
+			(
+				(PVOID)((DWORD64)Ptr),
+				&m_Entity[i], sizeof(Player)
+			))
+			{
+				continue;
+			}
+
+			if (!engine->GetProcess()->ReadMemory
+			(
+				(PVOID)((DWORD64)m_Entity[i].GetdwBoneMatrix() + 8 * 0x30),
+				&m_Matrix[i], sizeof(s_matrix3x4)
+			))
+			{
+				continue;
+			}
+		}
+	}	
 }

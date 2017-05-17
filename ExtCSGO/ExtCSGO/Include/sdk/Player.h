@@ -1,11 +1,11 @@
 #pragma once
 #include "Maths\Vector.h"
-
+#include "..\Netvars.h"
 namespace ExtCSGO::sdk
 {	
 	class Player
 	{
-		char m_Player[0x10000];
+		char m_Player[m_iShotsFired + 0x4];
 	public:
 		int GetHealth() const;
 		int GetTeamNum() const;
@@ -21,11 +21,5 @@ namespace ExtCSGO::sdk
 
 		bool IsDormant() const;
 		bool IsValid() const;
-
-		void Reset()
-		{
-			for (int i = 0; i < 0x10000; i++)
-				m_Player[i] = 0;
-		}
 	};
 }

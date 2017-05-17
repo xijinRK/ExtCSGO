@@ -16,12 +16,15 @@ namespace ExtCSGO
 		"-steam -freq 144 -novid") ),
 		m_ClientDLL(new Module("client.dll", LIST_MODULES_32BIT)),
 		m_EngineDLL(new Module("engine.dll", LIST_MODULES_32BIT)),
-		m_IClientEntity(new IClientEntityList(this))
+		m_IVEngineClient(new IVEngineClient()),
+		m_IClientEntity(new IClientEntityList())
 	{
 	}
 
 	Engine::~Engine()
 	{
+		delete m_IClientEntity;
+		delete m_IVEngineClient;
 		delete m_EngineDLL;
 		delete m_ClientDLL;
 		delete m_Process;
@@ -50,30 +53,8 @@ namespace ExtCSGO
 
 	bool Engine::GetIVEngine(IVEngineClient **IVEngine) const
 	{
-		static DWORD Ptr = 0;
-		if (!m_Process->ReadMemory
-		(
-			(PVOID)((DWORD64)m_EngineDLL->GetdwBaseAddress() + m_ClientState),
-			&Ptr, sizeof(vec3)
-		))
-		{
-			return false;
-		}
-
-		static IVEngineClient Engine;
-		if (!m_Process->ReadMemory
-		(
-			(PVOID)(DWORD64)(Ptr),
-			&Engine, sizeof(IVEngineClient)
-		))
-		{
-			return false;
-		}
-
-		*IVEngine = &Engine;
-
-
-		return (*IVEngine > nullptr);
+		*IVEngine = m_IVEngineClient;
+		return (m_IVEngineClient > nullptr);
 	}
 
 	void Engine::Update() const
@@ -95,6 +76,12 @@ namespace ExtCSGO
 				std::cout << "Process Found! Handle:" << m_Process->GetProcess() << std::endl;
 			}
 		}
+	}
+
+	void Engine::UpdateEvents()
+	{
+		m_IClientEntity->Update(this);
+		m_IVEngineClient->Update(this);
 	}
 
 	bool Engine::IsValid() const

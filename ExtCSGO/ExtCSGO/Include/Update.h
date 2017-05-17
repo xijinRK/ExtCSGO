@@ -4,15 +4,15 @@
 
 namespace ExtCSGO
 {
-	class Update
+	class Update : public Engine
 	{
-		Engine* m_Engine;
-
-		Features::
-		Aimbot* m_Aimbot;
+        Features::Aimbot* m_Aimbot;
+        bool              m_Running;		
 	public:
 		Update(char* argv[]);
 		~Update();
-		int Run() const;
+		int Run();
+	private:
+		friend void UpdateThread(Update* update);
 	};
 }
