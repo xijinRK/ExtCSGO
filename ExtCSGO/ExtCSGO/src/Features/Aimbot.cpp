@@ -46,6 +46,10 @@ namespace ExtCSGO::Features
 				PixelMove(m_IVEngine->GetViewAngles(), AimAngles, (float)m_Sensitivity, m_AimSmooth);
 			}		
 		}
+		else
+		{
+			ResetTarget();
+		}
 
 	}
 
