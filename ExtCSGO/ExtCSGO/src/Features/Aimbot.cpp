@@ -66,7 +66,7 @@ namespace ExtCSGO::Features
 		for (auto i = 1; i < 32; i++)
 		{
             auto Enemy = m_EntList->GetClientEntity(i);
-			if (!Enemy->IsValid())
+            if (!Enemy->IsValid())
 				continue;
 
 			if (Enemy->GetTeamNum() == LocalPlayer->GetTeamNum())
