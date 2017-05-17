@@ -15,6 +15,7 @@ Because its using CreateProcessA to get processhandle instead of OpenProcess.
 Shortcut Args:
 
 ExtCSGO.exe [AimKey] [AimFov] [AimSmooth] [CSGOSensitivity]
+
 Example: https://i.imgur.com/tAuGamZ.png
 
 3: Open ExtCSGO.exe Shortcut and Press Insert.
