@@ -10,12 +10,13 @@ Because its using CreateProcessA to get processhandle instead of OpenProcess.
 
 1: Compile x64 Release
 
-2: Make ExtCSGO.exe Shortcut & Edit
-https://i.imgur.com/tAuGamZ.png
+2: Create ExtCSGO.exe Shortcut & Edit With Arguments. 
 
-Shortcut Args: 
-AimKey, AimFov, AimSmooth & CSGO Sensitivity
+Shortcut Args:
 
-3:Start ExtCSGO Press Insert to start Aimbotting.
+ExtCSGO.exe [AimKey] [AimFov] [AimSmooth] [CSGOSensitivity]
+Example: https://i.imgur.com/tAuGamZ.png
+
+3: Open ExtCSGO.exe Shortcut and Press Insert.
 
 
