@@ -12,6 +12,7 @@ Because its using CreateProcessA to get processhandle instead of OpenProcess.
 
 2: Make ExtCSGO.exe Shortcut & Edit
 https://i.imgur.com/tAuGamZ.png
+
 Shortcut Args: 
 AimKey, AimFov, AimSmooth & CSGO Sensitivity
 
