@@ -18,7 +18,4 @@ AimKey, AimFov, AimSmooth & CSGO Sensitivity
 
 3:Start ExtCSGO Press Insert to start Aimbotting.
 
-example: ExtCSGO.exe "1" "180" "0" "2.0"
-
-
 
