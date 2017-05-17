@@ -10,7 +10,7 @@ Because its using CreateProcessA to get processhandle instead of OpenProcess.
 
 1: Compile x64 Release
 
-2: Create ExtCSGO.exe Shortcut & Edit With Arguments. 
+2: Create ExtCSGO.exe Shortcut With Arguments. 
 
 Shortcut Args:
 
