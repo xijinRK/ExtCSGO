@@ -12,7 +12,6 @@ Because its using CreateProcessA to get processhandle instead of OpenProcess.
 
 2: Edit \ExtCSGO\ExtCSGO\config.cfg
 
-
 3: Open ExtCSGO.exe Shortcut and Press Insert.
 
 

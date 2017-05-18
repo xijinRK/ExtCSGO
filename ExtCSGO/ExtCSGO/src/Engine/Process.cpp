@@ -119,9 +119,9 @@ namespace ExtCSGO
 
 	static bool NewProcess(
 		const char* ProcessPath,
-		const char * ProcessName,
+		const char* ProcessName,
 		const char* Arguments,
-		PHANDLE ProcessHandle)
+		PHANDLE		ProcessHandle)
 	{
 		PROCESS_INFORMATION		pi = { 0 };
 		STARTUPINFOA			si = { 0 };

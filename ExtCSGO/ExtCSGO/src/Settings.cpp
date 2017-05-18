@@ -26,13 +26,12 @@ namespace ExtCSGO
 
 	bool Settings::LoadSettings()
 	{
-		FILE *File = nullptr;
-
-		if(!(File = OpenFile("config.cfg")))
+		auto File = OpenFile("config.cfg");
+		if(File == nullptr)
 		{
 			return false;
 		}
-		
+
 		m_GamePath = ReadString(File, "GamePath=");
 		m_LaunchOptions = ReadString(File, "LaunchOptions=");
 		m_AimKey = ReadInt(File, "AimKey=");
@@ -58,6 +57,7 @@ namespace ExtCSGO
 		}
 		return m_Settings;
 	}
+
 	void Settings::DeleteSettings()
 	{
 		if (m_Settings > nullptr)
@@ -66,16 +66,12 @@ namespace ExtCSGO
 			m_Settings = nullptr;
 		}
 	}
-	Settings* Settings::m_Settings;
 
 	static FILE* OpenFile(const char* FileName)
 	{
-		FILE nFile;
-		auto *fPtr = &nFile;
-		if (fopen_s(&fPtr, FileName, "r"))
-			return nullptr;
-
-		return fPtr;
+		FILE		nFile;
+		auto*		fPtr = &nFile;
+		return (fopen_s(&fPtr, FileName, "r")) ? fPtr : nullptr;
 	}
 
 	static void CloseFile(FILE* File)
@@ -104,6 +100,9 @@ namespace ExtCSGO
 			}
 		}
 		auto StringLenght = (strlen(String.c_str()) + 1);
+		if (StringLenght == 0)
+			return nullptr;
+
 		char* str = new char[StringLenght];
 
 		strcpy_s(str, StringLenght, String.c_str());
@@ -126,4 +125,5 @@ namespace ExtCSGO
 		return Result;
 	}
 
+	Settings* Settings::m_Settings;
 }

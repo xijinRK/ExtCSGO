@@ -6,13 +6,13 @@ namespace ExtCSGO::Features
 	using namespace sdk;
 	using namespace Maths;
 
-	static bool GetBestTarget(
-		const IClientEntityList* EntityList,
-		const Player*			 LocalPlayer,
-		const vec3&				 ViewAngles,
-		Player**				 Target,
-		int*					 Index,
-		float*					 BestFov);
+	static bool GetBestTarget (
+		const IClientEntityList*	EntityList,
+		const Player*				LocalPlayer,
+		const vec3&					ViewAngles,
+		Player**					Target,
+		int*						Index,
+		float*						BestFov);
 
 	static vec3 CalculateAngles(
 		const Player*	Local,
@@ -25,8 +25,7 @@ namespace ExtCSGO::Features
 		const float &	Sensitivity,
 		const DWORD &	Smooth);
 
-	void Aimbot (
-		const Engine*		Engine )
+	void Aimbot(const Engine* Engine)
 	{
 		static Player*		BestTarget = nullptr;
 		static int			BestIndex = -1;
@@ -66,13 +65,13 @@ namespace ExtCSGO::Features
 		}
 	}
 
-	static bool GetBestTarget(
-		const IClientEntityList* EntityList,
-		const Player*			 LocalPlayer,
-		const vec3&				 ViewAngles,
-		Player**				 Target,
-		int*					 Index,
-		float*					 BestFov)
+	static bool GetBestTarget (
+		const IClientEntityList*	EntityList,
+		const Player*				LocalPlayer,
+		const vec3&					ViewAngles,
+		Player**					Target,
+		int*						Index,
+		float*						BestFov)
 	{
 		for (auto i = 1; i < MaxEntityIndex; i++)
 		{

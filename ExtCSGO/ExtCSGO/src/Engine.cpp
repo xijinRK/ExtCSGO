@@ -16,13 +16,13 @@ namespace ExtCSGO
 				Settings::GetSettings()->m_GamePath,
 				"csgo.exe",
 				"Valve001",
-				std::string(
-				std::string(std::string("-steam ") +
-				std::string(Settings::GetSettings()->m_LaunchOptions))).c_str()
+				std::string
+				(
+					std::string(std::string("-steam ") +
+					std::string(Settings::GetSettings()->m_LaunchOptions))
+				).c_str()
 			)
 		),
-
-
 		m_ClientDLL(new Module("client.dll", LIST_MODULES_32BIT)),
 		m_EngineDLL(new Module("engine.dll", LIST_MODULES_32BIT)),
 		m_IVEngineClient(new IVEngineClient()),

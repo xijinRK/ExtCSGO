@@ -6,7 +6,7 @@
 namespace ExtCSGO
 {
 	static bool ExGetModuleHandle(
-		const HANDLE &  hProcess,
+		const HANDLE&	hProcess,
 		const char*		ModuleName,
 		int				LIST_MODULES,
 		HMODULE*		hModule);
@@ -48,7 +48,7 @@ namespace ExtCSGO
 	}
 
 	static bool ExGetModuleHandle(
-		const HANDLE &	hProcess,
+		const HANDLE&	hProcess,
 		const char*		ModuleName,
 		int				LIST_MODULES,
 		HMODULE*		hModule)
@@ -80,4 +80,5 @@ namespace ExtCSGO
 
 		return true;
 	}
+	
 }

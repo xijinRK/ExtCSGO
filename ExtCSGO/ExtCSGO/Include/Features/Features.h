@@ -4,9 +4,6 @@
 
 namespace ExtCSGO::Features
 {
-	void Aimbot (
-		const Engine*				Engine );
-
-	void Triggerbot(
-		const Engine*				engine );
+	void Aimbot(const Engine* engine);
+	void Triggerbot(const Engine* engine);
 }

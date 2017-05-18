@@ -7,7 +7,7 @@ namespace ExtCSGO
 {
 	class Update
 	{
-        bool			m_Enabled;
+		bool			m_Enabled;
 	public:
 		Engine*			m_Engine;
 	public:
