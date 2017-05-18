@@ -10,7 +10,7 @@ Because its using CreateProcessA to get processhandle instead of OpenProcess.
 
 1: Compile x64 Release
 
-2: Edit config.cfg
+2: Edit \ExtCSGO\ExtCSGO\config.cfg
 
 
 3: Open ExtCSGO.exe Shortcut and Press Insert.
