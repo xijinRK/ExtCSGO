@@ -75,7 +75,7 @@ namespace ExtCSGO::Maths
 		forward->z = -sp;
 	}
 
-	float Distance2d(vec3 v1, vec3 v2)
+	float Distance2d(const vec3& v1, const vec3& v2)
 	{
 		return (float)sqrt(pow(v1.x - v2.x, 2.0f) + pow(v1.y - v2.y, 2) + pow(v1.z - v2.z, 2.0f));
 	}
@@ -93,7 +93,7 @@ namespace ExtCSGO::Maths
 	}
 
 	vec3 ConvertAngles(
-		const float Sensitivity,
+		const float& Sensitivity,
 		const vec3 &AimAngle,
 		const vec3 &ViewAngle)
 	{

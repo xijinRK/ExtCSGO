@@ -4,22 +4,26 @@ namespace ExtCSGO
 {
 	static void UpdateThread(Update* update);
 	Update::Update() :
+		m_Settings(new Settings()),
+		m_Engine(new Engine(m_Settings)),
 		m_Enabled(false)
 	{
-		if (Settings::GetSettings()->LoadSettings())
-		{
-			m_Engine = new Engine();
-		}
-		else
-		{
-			exit(0);
-		}
 	}
 
 	Update::~Update()
 	{
 		delete m_Engine;
-		Settings::DeleteSettings();
+		delete m_Settings;
+	}
+
+	Settings * Update::GetSettings() const
+	{
+		return m_Settings;
+	}
+
+	Engine * Update::GetEngine() const
+	{
+		return m_Engine;
 	}
 
 	bool Update::IsEnabled() const
@@ -42,8 +46,8 @@ namespace ExtCSGO
 			{
 				if (m_Engine->IsValid())
 				{
-					Features::Aimbot(m_Engine);
-					Features::Triggerbot(m_Engine);
+					Features::Aimbot(m_Engine, m_Settings);
+					Features::Triggerbot(m_Engine, m_Settings);
 				}
 			}
 		}
@@ -58,9 +62,9 @@ namespace ExtCSGO
 			Sleep(1);
 			if (update->IsEnabled())
 			{ 
-				if (update->m_Engine->IsValid())
+				if (update->GetEngine()->IsValid())
 				{
-					update->m_Engine->UpdateEvents();
+					update->GetEngine()->UpdateEvents();
 				}
 				else
 				{
@@ -68,7 +72,7 @@ namespace ExtCSGO
 					#else
 					Sleep(5000);
 					#endif
-					update->m_Engine->Update();
+					update->GetEngine()->Update();
 				}
 			}
 			if (GetAsyncKeyState(VK_INSERT) & 1)

@@ -1,20 +1,22 @@
 #pragma once
-#include "Engine.h"
 #include "Settings.h"
+#include "Engine.h"
 #include "Features\Features.h"
 
 namespace ExtCSGO
 {
 	class Update
 	{
-		bool			m_Enabled;
-	public:
-		Engine*			m_Engine;
+		Settings*       m_Settings;
+		Engine*         m_Engine;
+		bool            m_Enabled;
 	public:
 		Update();
 		~Update();
-		bool			IsEnabled() const;
-		void			SetEnabled(const bool & v);
-		int			Run();
+		Settings*       GetSettings() const;
+		Engine*         GetEngine() const;
+		bool            IsEnabled() const;
+		void            SetEnabled(const bool & v);
+		int             Run();
 	};
 }

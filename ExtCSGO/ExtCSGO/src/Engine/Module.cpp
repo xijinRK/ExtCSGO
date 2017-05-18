@@ -1,15 +1,13 @@
 #include "Engine\Memory.h"
-
 #include <Psapi.h>
-#include <iostream>
 
 namespace ExtCSGO
 {
 	static bool ExGetModuleHandle(
-		const HANDLE&		hProcess,
-		const char*		ModuleName,
-		int			LIST_MODULES,
-		HMODULE*		hModule);
+		const HANDLE&   hProcess,
+		const char*     ModuleName,
+		int             LIST_MODULES,
+		HMODULE*        hModule);
 
 	Module::Module(const char* ModuleName, const int & LIST_MODULES) : 
 		m_ModuleName(ModuleName),
@@ -48,10 +46,10 @@ namespace ExtCSGO
 	}
 
 	static bool ExGetModuleHandle(
-		const HANDLE&		hProcess,
-		const char*		ModuleName,
-		int			LIST_MODULES,
-		HMODULE*		hModule)
+		const HANDLE&   hProcess,
+		const char*     ModuleName,
+		int             LIST_MODULES,
+		HMODULE*        hModule)
 
 	{
 		DWORD			ModuleCount = 0;

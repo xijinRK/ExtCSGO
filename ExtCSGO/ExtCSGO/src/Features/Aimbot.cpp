@@ -25,13 +25,13 @@ namespace ExtCSGO::Features
 		const float&	Sensitivity,
 		const DWORD&	Smooth);
 
-	void Aimbot(const Engine* Engine)
+	void Aimbot(const Engine* Engine, const Settings* settings)
 	{
 		static Player*		BestTarget = nullptr;
 		static int		BestIndex = -1;
 		static float		BestFov = 180.f;
 
-		if (GetAsyncKeyState(Settings::GetSettings()->m_AimKey))
+		if (GetAsyncKeyState(settings->m_AimKey))
 		{
 			auto LocalPlayer = Engine->GetIClientEnt()->GetClientEntity(Engine->GetIVEngine()->GetLocalPlayer());
 			if (!LocalPlayer->IsValid())
@@ -46,14 +46,14 @@ namespace ExtCSGO::Features
 			}
 
 			auto & AimAngles = CalculateAngles(LocalPlayer, BestTarget, Engine->GetIClientEnt()->GetHeadBone(BestIndex));
-			if (BestFov < (float)Settings::GetSettings()->m_AimFov)
+			if (BestFov < (float)settings->m_AimFov)
 			{
 				PixelMove
 				(
 					Engine->GetIVEngine()->GetViewAngles(),
 					AimAngles,
-					(float)Settings::GetSettings()->m_Sensitivity,
-					Settings::GetSettings()->m_AimSmooth
+					(float)settings->m_Sensitivity,
+					settings->m_AimSmooth
 				);
 			}
 		}
@@ -154,19 +154,17 @@ namespace ExtCSGO::Features
 			if (GetTickCount() - TickCount >= Smooth - 1)
 			{
 				TickCount = GetTickCount();
-				mouse_event(MOUSEEVENTF_MOVE, (int)Smoothed.x, (int)Smoothed.y, 0, 0);
+				PixelAngles = Smoothed;
 			}
 			
 		}
-		else
+		static auto TickCount = GetTickCount();
+		if (GetTickCount() - TickCount > 0)
 		{
-			static auto TickCount = GetTickCount();
-			if (GetTickCount() - TickCount > 0)
-			{
-				TickCount = GetTickCount();
-				mouse_event(MOUSEEVENTF_MOVE, (int)PixelAngles.x, (int)PixelAngles.y, 0, 0);
-			}
+			TickCount = GetTickCount();
+			mouse_event(MOUSEEVENTF_MOVE, (int)PixelAngles.x, (int)PixelAngles.y, 0, 0);
 		}
+		
 	}
 
 }

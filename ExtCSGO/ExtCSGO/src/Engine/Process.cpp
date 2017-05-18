@@ -1,5 +1,4 @@
 #include "Engine\Memory.h"
-#include <iostream>
 
 namespace ExtCSGO
 {
@@ -24,10 +23,9 @@ namespace ExtCSGO
 		const char* ProcessArguments) :
 			m_ProcessPath(ProcessPath), 
 			m_ProcessName(ProcessName),
-			m_WindowClassName(WindowClassName)
+			m_WindowClassName(WindowClassName),
+			m_ProcessArguments(ProcessArguments)
 	{
-		m_ProcessArguments = new char[strlen(ProcessArguments) + 1];
-		strcpy_s(m_ProcessArguments, strlen(ProcessArguments) + 1, ProcessArguments);
 		m_Process = nullptr;
 	}
 
@@ -104,8 +102,7 @@ namespace ExtCSGO
 	{
 		std::string CmdString = 
 		(
-			"Taskkill /IM" + std::string(" ") + 
-			ProcessName	   + std::string(" ") + "/F"
+			"Taskkill /IM" + std::string(" ") + ProcessName	+ " /F"
 		);
 
 		system(CmdString.c_str());
@@ -121,28 +118,26 @@ namespace ExtCSGO
 		const char* Arguments,
 		PHANDLE	    ProcessHandle)
 	{
-		PROCESS_INFORMATION		pi = { 0 };
-		STARTUPINFOA			si = { 0 };
-						si.cb = sizeof(STARTUPINFO);
-						si.dwFlags = STARTF_USESHOWWINDOW;
-						si.wShowWindow = SW_HIDE;
+		PROCESS_INFORMATION             pi = { 0 };
+		STARTUPINFOA                    si = { 0 };
+		                                si.cb = sizeof(STARTUPINFO);
+		                                si.dwFlags = STARTF_USESHOWWINDOW;
+		                                si.wShowWindow = SW_HIDE;
 
-		std::string PPath = ProcessPath;
-		PPath.erase(PPath.end() - 1);
 
-		std::string FullPath = std::string
+		std::string Path = ProcessPath;
+		Path.erase(Path.end() - 1);
+
+		std::string FullPath
 		(
-			PPath +
-			std::string(ProcessName + std::string(" ")	+
-			Arguments
-		));
+			Path + std::string(ProcessName + std::string(" ") + "-steam " + Arguments)
+		);
 
 		if (!CreateProcessA (
 			nullptr, (LPSTR)FullPath.c_str(),
 			nullptr, nullptr, FALSE, FALSE,
 			nullptr, nullptr, &si, &pi))
 		{
-			std::cout << FullPath.c_str() << std::endl;
 			return false;
 		}
 

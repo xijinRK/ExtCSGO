@@ -1,26 +1,24 @@
 #include "Settings.h"
-#include <stdio.h>
-#include <string>
+#include <iostream>
 
 namespace ExtCSGO
 {
-	static FILE* 		OpenFile(const char* FileName);
-	static void 		CloseFile(FILE* File);
-	static bool 		ReadFile(FILE* File, char* Buffer, const size_t BufferSize);
-	static const char* 	ReadString(FILE* File, const char* Name);
-	static double 		ReadDouble(FILE* File, const char* Name);
-	static int 		ReadInt(FILE* File, const char* Name);
-
+	static FILE*        OpenFile(const char* FileName);
+	static void         CloseFile(FILE* File);
+	static bool         ReadFile(FILE* File, char* Buffer, const size_t BufferSize);
+	static std::string  ReadString(FILE* File, const char* Name);
 
 	Settings::Settings()
 	{
-
+		if (!LoadSettings())
+		{
+			std::cout << "[error]settings" << std::endl;;
+			exit(0);
+		}
 	}
 
 	Settings::~Settings()
 	{
-		delete m_GamePath;
-		delete m_LaunchOptions;
 	}
 
 	bool Settings::LoadSettings()
@@ -30,47 +28,26 @@ namespace ExtCSGO
 		{
 			return false;
 		}
-
+	
 		m_GamePath = ReadString(File, "GamePath=");
 		m_LaunchOptions = ReadString(File, "LaunchOptions=");
-		m_AimKey = ReadInt(File, "AimKey=");
-		m_AimFov = ReadDouble(File, "AimFov=");
-		m_AimSmooth = ReadInt(File, "AimSmooth=");
-		m_Sensitivity = ReadDouble(File, "Sensitivity=");
-		m_TriggerKey = ReadInt(File, "TriggerKey=");
-		m_TriggerBurst = ReadInt(File, "TriggerBurst=");
-
-
+		m_AimKey = std::stoi(ReadString(File, "AimKey="));
+		m_AimFov = std::stod(ReadString(File, "AimFov="));
+		m_AimSmooth = std::stoi(ReadString(File, "AimSmooth="));
+		m_Sensitivity = std::stod(ReadString(File, "Sensitivity="));
+		m_TriggerKey = std::stoi(ReadString(File, "TriggerKey="));
+		m_TriggerBurst = std::stoi(ReadString(File, "TriggerBurst="));
+		
 		CloseFile(File);
-
 		delete File;
-
 		return true;
-	}
-
-	Settings* Settings::GetSettings()
-	{
-		if (m_Settings == nullptr)
-		{
-			m_Settings = new Settings();
-		}
-		return m_Settings;
-	}
-
-	void Settings::DeleteSettings()
-	{
-		if (m_Settings > nullptr)
-		{
-			delete m_Settings;
-			m_Settings = nullptr;
-		}
 	}
 
 	static FILE* OpenFile(const char* FileName)
 	{
-		FILE		nFile;
-		auto*		fPtr = &nFile;
-		return 		(fopen_s(&fPtr, FileName, "r")) ? fPtr : nullptr;
+		FILE		File;
+		auto*		FilePtr = &File;
+		return 		!(fopen_s(&FilePtr, FileName, "r")) ? FilePtr : nullptr;
 	}
 
 	static void CloseFile(FILE* File)
@@ -83,46 +60,20 @@ namespace ExtCSGO
 		return fgets(Buffer, (int)BufferSize, File) > nullptr;
 	}
 
-	static const char* ReadString(FILE* File, const char* Name)
+	static std::string ReadString(FILE* File, const char* Name)
 	{
-		std::string String;
+		char str[260];
+		std::string StrString;
+		while (ReadFile(File, str, 260))
 		{
-			char str[260];	
-			while (ReadFile(File, str, 260))
+			StrString = str;
+			if (StrString.find(Name) != std::string::npos)
 			{
-				String = str;
-				if (String.find(Name) != std::string::npos)
-				{
-					String.erase(String.begin(), String.begin() + strlen(Name));
-					break;
-				}
+				StrString.erase(StrString.begin(), StrString.begin() + strlen(Name));
+				break;
 			}
 		}
-		auto StringLenght = (strlen(String.c_str()) + 1);
-		if (StringLenght == 0)
-		{
-			return nullptr;
-		}
-		char* str = new char[StringLenght];
-		strcpy_s(str, StringLenght, String.c_str());
-		return str;
-	}
 
-	static double ReadDouble(FILE* File, const char* Name)
-	{
-		auto String = ReadString(File, Name);
-		auto Result = std::stod(String);
-		delete String;
-		return Result;
+		return StrString;
 	}
-
-	static int ReadInt(FILE* File, const char* Name)
-	{
-		auto String = ReadString(File, Name);
-		auto Result = std::stoi(String);
-		delete String;
-		return Result;
-	}
-
-	Settings* Settings::m_Settings;
 }

@@ -14,23 +14,23 @@ namespace ExtCSGO::Features
 	static bool GetTarget(const Engine* engine);
 	static void ClickLeftButton(const bool & Flags, const int & ClickBurst);
 
-	void Triggerbot(const Engine* engine)
+	void Triggerbot(const Engine* engine, const Settings* settings)
 	{
-		if (GetAsyncKeyState(Settings::GetSettings()->m_TriggerKey))
+		if (GetAsyncKeyState(settings->m_TriggerKey))
 		{
 			if (GetTarget(engine))
 			{
-				ClickLeftButton(Button_Press, Settings::GetSettings()->m_TriggerBurst);
+				ClickLeftButton(Button_Press, settings->m_TriggerBurst);
 			}
 
 			else
 			{
-				ClickLeftButton(Button_Release, Settings::GetSettings()->m_TriggerBurst);
+				ClickLeftButton(Button_Release, settings->m_TriggerBurst);
 			}
 		}
 		else
 		{
-			ClickLeftButton(Button_Release, Settings::GetSettings()->m_TriggerBurst);
+			ClickLeftButton(Button_Release, settings->m_TriggerBurst);
 		}
 	}
 

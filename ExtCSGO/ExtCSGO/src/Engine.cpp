@@ -8,19 +8,15 @@
 namespace ExtCSGO
 {
 	using namespace sdk;
-	Engine::Engine() :
+	Engine::Engine(const Settings* settings) :
 		m_Process
 		(
 			new Process
 			(
-				Settings::GetSettings()->m_GamePath,
+				settings->m_GamePath.c_str(),
 				"csgo.exe",
 				"Valve001",
-				std::string
-				(
-					std::string(std::string("-steam ") +
-					std::string(Settings::GetSettings()->m_LaunchOptions))
-				).c_str()
+				settings->m_LaunchOptions.c_str()
 			)
 		),
 		m_ClientDLL(new Module("client.dll", LIST_MODULES_32BIT)),
