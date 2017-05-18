@@ -13,23 +13,21 @@ namespace ExtCSGO
 		const char* ProcessPath,
 		const char* ProcessName,
 		const char* Arguments,
-		PHANDLE		ProcessHandle);
+		PHANDLE     ProcessHandle);
 
-	static bool DebugNewProcess(
-		const char* WindowClassName,
-		PHANDLE		ProcessHandle);
+	static bool DebugNewProcess(const char* WindowClassName, PHANDLE ProcessHandle);
 
 	Process::Process(
 		const char* ProcessPath,
 		const char* ProcessName,
 		const char* WindowClassName,
 		const char* ProcessArguments) :
-			m_ProcessPath(ProcessPath), m_ProcessName(ProcessName),
+			m_ProcessPath(ProcessPath), 
+			m_ProcessName(ProcessName),
 			m_WindowClassName(WindowClassName)
 	{
 		m_ProcessArguments = new char[strlen(ProcessArguments) + 1];
 		strcpy_s(m_ProcessArguments, strlen(ProcessArguments) + 1, ProcessArguments);
-
 		m_Process = nullptr;
 	}
 
@@ -121,13 +119,13 @@ namespace ExtCSGO
 		const char* ProcessPath,
 		const char* ProcessName,
 		const char* Arguments,
-		PHANDLE		ProcessHandle)
+		PHANDLE	    ProcessHandle)
 	{
 		PROCESS_INFORMATION		pi = { 0 };
 		STARTUPINFOA			si = { 0 };
-								si.cb = sizeof(STARTUPINFO);
-								si.dwFlags = STARTF_USESHOWWINDOW;
-								si.wShowWindow = SW_HIDE;
+						si.cb = sizeof(STARTUPINFO);
+						si.dwFlags = STARTF_USESHOWWINDOW;
+						si.wShowWindow = SW_HIDE;
 
 		std::string PPath = ProcessPath;
 		PPath.erase(PPath.end() - 1);
@@ -154,9 +152,7 @@ namespace ExtCSGO
 		return true;
 	}
 
-	static bool DebugNewProcess(
-		const char* WindowClassName,
-		PHANDLE		ProcessHandle)
+	static bool DebugNewProcess(const char* WindowClassName, PHANDLE ProcessHandle)
 	{
 		DWORD ProcessId = FALSE;
 		GetWindowThreadProcessId(FindWindowA(WindowClassName, nullptr), &ProcessId);

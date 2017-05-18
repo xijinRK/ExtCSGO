@@ -8,27 +8,27 @@ namespace ExtCSGO::Features
 
 	static bool GetBestTarget (
 		const IClientEntityList*	EntityList,
-		const Player*				LocalPlayer,
-		const vec3&					ViewAngles,
-		Player**					Target,
-		int*						Index,
-		float*						BestFov);
+		const Player*			LocalPlayer,
+		const vec3&			ViewAngles,
+		Player**			Target,
+		int*				Index,
+		float*				BestFov);
 
-	static vec3 CalculateAngles(
+	static vec3 CalculateAngles (
 		const Player*	Local,
 		const Player*	Entity,
-		vec3&			BonePosition);
+		vec3&		BonePosition);
 
-	static void PixelMove(
-		const vec3 &	ViewAngles,
-		const vec3 &	AimAngles,
-		const float &	Sensitivity,
-		const DWORD &	Smooth);
+	static void PixelMove (
+		const vec3&	ViewAngles,
+		const vec3&	AimAngles,
+		const float&	Sensitivity,
+		const DWORD&	Smooth);
 
 	void Aimbot(const Engine* Engine)
 	{
 		static Player*		BestTarget = nullptr;
-		static int			BestIndex = -1;
+		static int		BestIndex = -1;
 		static float		BestFov = 180.f;
 
 		if (GetAsyncKeyState(Settings::GetSettings()->m_AimKey))
@@ -67,16 +67,16 @@ namespace ExtCSGO::Features
 
 	static bool GetBestTarget (
 		const IClientEntityList*	EntityList,
-		const Player*				LocalPlayer,
-		const vec3&					ViewAngles,
-		Player**					Target,
-		int*						Index,
-		float*						BestFov)
+		const Player*			LocalPlayer,
+		const vec3&			ViewAngles,
+		Player**			Target,
+		int*				Index,
+		float*				BestFov)
 	{
 		for (auto i = 1; i < MaxEntityIndex; i++)
 		{
-            auto targetPlayer = EntityList->GetClientEntity(i);
-            if (!targetPlayer->IsValid())
+            		auto targetPlayer = EntityList->GetClientEntity(i);
+            		if (!targetPlayer->IsValid())
 				continue;
 
 			if (targetPlayer->GetTeamNum() == LocalPlayer->GetTeamNum())
@@ -108,10 +108,11 @@ namespace ExtCSGO::Features
 		return true;
 	}
 
-	static vec3 CalculateAngles(
+
+	static vec3 CalculateAngles (
 		const Player*	Local,
 		const Player*	Entity,
-		vec3&			BonePosition)
+		vec3&		BonePosition)
 	{
 
 		auto & BoneCoords = BonePosition;
@@ -131,10 +132,10 @@ namespace ExtCSGO::Features
 	}
 
 	static void PixelMove(
-		const vec3 &	ViewAngles,
-		const vec3 &	AimAngles,
-		const float &	Sensitivity,
-		const DWORD &	Smooth)
+		const vec3&	ViewAngles,
+		const vec3&	AimAngles,
+		const float&	Sensitivity,
+		const DWORD&	Smooth)
 	{
 		auto & PixelAngles = ConvertAngles(Sensitivity, AimAngles, ViewAngles);
 		if (Smooth > 0)

@@ -5,22 +5,21 @@ namespace ExtCSGO::sdk
 {	
 	class Player
 	{
-		char m_Player[m_CrosshairId + 0x4];
+		char	 m_Player[m_CrosshairId + 0x4];
 	public:
-		int GetHealth() const;
-		int GetTeamNum() const;
-		int GetLifeState() const;
-		int GetShotsFired() const;
-		int GetCrosshairId() const;
+		int 	 GetHealth() const;
+		int 	 GetTeamNum() const;
+		int 	 GetLifeState() const;
+		int 	 GetShotsFired() const;
+		int 	 GetCrosshairId() const;
 
-		vec3 GetOrigin() const;
-		vec3 GetVecView() const;
-		vec3 GetEyePosition() const;
-		vec3 GetVecPunch() const;
+		vec3 	 GetOrigin() const;
+		vec3 	 GetVecView() const;
+		vec3 	 GetEyePosition() const;
+		vec3 	 GetVecPunch() const;
 		uint32_t GetdwBoneMatrix() const;
 
-
-		bool IsDormant() const;
-		bool IsValid() const;
+		bool 	 IsDormant() const;
+		bool 	 IsValid() const;
 	};
 }

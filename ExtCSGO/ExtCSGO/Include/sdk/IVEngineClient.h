@@ -11,11 +11,10 @@ namespace ExtCSGO::sdk
 {
 	class IVEngineClient
 	{
-		char m_IVEngine[m_ViewAngles + 0xC];
+		char 	m_IVEngine[m_ViewAngles + 0xC];
 	public:
-		int GetLocalPlayer() const;
-		vec3 GetViewAngles() const;
-
-		void Update(const Engine* engine) const;
+		int 	GetLocalPlayer() const;
+		vec3 	GetViewAngles() const;
+		void 	Update(const Engine* engine) const;
 	};
 }

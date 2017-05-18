@@ -11,7 +11,7 @@ namespace ExtCSGO::Features
 		Button_Release = false
 	};
 
-	static bool GetTarget(const Engine*	engine);
+	static bool GetTarget(const Engine* engine);
 	static void ClickLeftButton(const bool & Flags, const int & ClickBurst);
 
 	void Triggerbot(const Engine* engine)
@@ -34,7 +34,7 @@ namespace ExtCSGO::Features
 		}
 	}
 
-	static bool GetTarget(const Engine*	engine)
+	static bool GetTarget(const Engine* engine)
 	{
 		auto LocalPlayer = engine->GetIClientEnt()->GetClientEntity(engine->GetIVEngine()->GetLocalPlayer());
 

@@ -15,6 +15,6 @@ namespace ExtCSGO
 		~Update();
 		bool			IsEnabled() const;
 		void			SetEnabled(const bool & v);
-		int				Run();
+		int			Run();
 	};
 }

@@ -6,9 +6,9 @@
 namespace ExtCSGO
 {
 	static bool ExGetModuleHandle(
-		const HANDLE&	hProcess,
+		const HANDLE&		hProcess,
 		const char*		ModuleName,
-		int				LIST_MODULES,
+		int			LIST_MODULES,
 		HMODULE*		hModule);
 
 	Module::Module(const char* ModuleName, const int & LIST_MODULES) : 
@@ -48,14 +48,15 @@ namespace ExtCSGO
 	}
 
 	static bool ExGetModuleHandle(
-		const HANDLE&	hProcess,
+		const HANDLE&		hProcess,
 		const char*		ModuleName,
-		int				LIST_MODULES,
+		int			LIST_MODULES,
 		HMODULE*		hModule)
+
 	{
-		DWORD				ModuleCount = 0;
-		HMODULE				Modules[1024] = { 0 };
-		CHAR				Name[MAX_PATH] = { 0 };
+		DWORD			ModuleCount = 0;
+		HMODULE			Modules[1024] = { 0 };
+		CHAR			Name[MAX_PATH] = { 0 };
 
 		if (!K32EnumProcessModulesEx(hProcess, Modules, 1024, &ModuleCount, LIST_MODULES))
 			return false;

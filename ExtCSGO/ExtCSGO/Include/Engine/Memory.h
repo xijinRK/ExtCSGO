@@ -5,7 +5,7 @@ namespace ExtCSGO
 {
 	enum PROCESS_FLAGS_CREATE
 	{
-		PROCESS_HANDLE =	( 1 << 0),
+		PROCESS_HANDLE =	( 1 << 0 ),
 		PROCESS_WINDOW =	( 1 << 2 )
 	};
 
@@ -23,29 +23,24 @@ namespace ExtCSGO
 			const char* WindowClassName,
 			const char* ProcessArguments);
 		~Process();
-
-
-		HANDLE GetHandle() const;
-
-		bool   ReadMemory(LPCVOID Adr, LPVOID Buffer, SIZE_T Size) const;
-		bool   Init();
-		bool   IsValid(const int & PROCESS_FLAGS) const;
+		HANDLE 			GetHandle() const;
+		bool  			ReadMemory(LPCVOID Adr, LPVOID Buffer, SIZE_T Size) const;
+		bool   			Init();
+		bool   			IsValid(const int & PROCESS_FLAGS) const;
 	};
 
 	class Module
 	{
 		const char*		m_ModuleName;
-		int				m_ListModules;
+		int			m_ListModules;
 		HMODULE			m_BaseAddress;
 	public:
 		Module(const char* ModuleName, const int & LIST_MODULES);
 		~Module();
-		HMODULE		GetBaseAddress() const;
-		DWORD		GetdwBaseAddress() const;
-
-		void		Reset();
-
-		bool		IsValid() const;
-		bool		Init(const HANDLE & hProcess);
+		HMODULE			GetBaseAddress() const;
+		DWORD			GetdwBaseAddress() const;
+		void			Reset();
+		bool			IsValid() const;
+		bool			Init(const HANDLE & hProcess);
 	};
 }

@@ -4,13 +4,12 @@
 
 namespace ExtCSGO
 {
-	static FILE* OpenFile(const char* FileName);
-	static void CloseFile(FILE* File);
-	static bool ReadFile(FILE* File, char* Buffer, const size_t BufferSize);
-	static const char* ReadString(FILE* File, const char* Name);
-
-	static double ReadDouble(FILE* File, const char* Name);
-	static int ReadInt(FILE* File, const char* Name);
+	static FILE* 		OpenFile(const char* FileName);
+	static void 		CloseFile(FILE* File);
+	static bool 		ReadFile(FILE* File, char* Buffer, const size_t BufferSize);
+	static const char* 	ReadString(FILE* File, const char* Name);
+	static double 		ReadDouble(FILE* File, const char* Name);
+	static int 		ReadInt(FILE* File, const char* Name);
 
 
 	Settings::Settings()
@@ -71,7 +70,7 @@ namespace ExtCSGO
 	{
 		FILE		nFile;
 		auto*		fPtr = &nFile;
-		return (fopen_s(&fPtr, FileName, "r")) ? fPtr : nullptr;
+		return 		(fopen_s(&fPtr, FileName, "r")) ? fPtr : nullptr;
 	}
 
 	static void CloseFile(FILE* File)
@@ -101,10 +100,10 @@ namespace ExtCSGO
 		}
 		auto StringLenght = (strlen(String.c_str()) + 1);
 		if (StringLenght == 0)
+		{
 			return nullptr;
-
+		}
 		char* str = new char[StringLenght];
-
 		strcpy_s(str, StringLenght, String.c_str());
 		return str;
 	}
