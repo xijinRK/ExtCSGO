@@ -10,13 +10,8 @@ Because its using CreateProcessA to get processhandle instead of OpenProcess.
 
 1: Compile x64 Release
 
-2: Create ExtCSGO.exe Shortcut With Arguments. 
+2: Edit config.cfg
 
-Shortcut Args:
-
-ExtCSGO.exe [AimKey] [AimFov] [AimSmooth] [CSGOSensitivity]
-
-Example: https://i.imgur.com/tAuGamZ.png
 
 3: Open ExtCSGO.exe Shortcut and Press Insert.
 
