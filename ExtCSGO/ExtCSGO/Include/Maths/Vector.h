@@ -8,6 +8,7 @@ namespace ExtCSGO
 		vec3();
 		vec3(const float & x, const float & y, const float & z);
 		vec3(const vec3 & v);
+		vec3(const float *v);
 		~vec3();
 
 		vec3 & Add(const vec3 & v);

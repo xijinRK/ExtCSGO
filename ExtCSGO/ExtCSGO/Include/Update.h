@@ -1,18 +1,20 @@
 #pragma once
 #include "Engine.h"
-#include "Features\Aimbot.h"
+#include "Settings.h"
+#include "Features\Features.h"
 
 namespace ExtCSGO
 {
-	class Update : public Engine
+	class Update
 	{
-        Features::Aimbot* m_Aimbot;
-        bool              m_Running;		
+        bool			m_Enabled;
 	public:
-		Update(char* argv[]);
+		Engine*			m_Engine;
+	public:
+		Update();
 		~Update();
-		int Run();
-	private:
-		friend void UpdateThread(Update* update);
+		bool			IsEnabled() const;
+		void			SetEnabled(const bool & v);
+		int				Run();
 	};
 }

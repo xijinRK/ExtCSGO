@@ -30,6 +30,13 @@ namespace ExtCSGO::sdk
 		return result;
 	}
 
+	int Player::GetCrosshairId() const
+	{
+		static int result = -1;
+		GetArrayData(m_Player, m_CrosshairId, &result);
+		return result;
+	}
+
 	vec3 Player::GetOrigin() const
 	{
 		static vec3 result;
@@ -39,9 +46,11 @@ namespace ExtCSGO::sdk
 
 	vec3 Player::GetVecView() const
 	{
-		static vec3 result;
+		static float result[2];
 		GetArrayData(m_Player, m_VecView + 0x4, &result);
-		return vec3(0.f, 0.f, result.y);
+
+		//for some reason its working only this way.
+		return vec3(0.f, result[0], result[1]);
 	}
 
 	vec3 Player::GetEyePosition() const

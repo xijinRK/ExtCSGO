@@ -5,12 +5,13 @@ namespace ExtCSGO::sdk
 {	
 	class Player
 	{
-		char m_Player[m_iShotsFired + 0x4];
+		char m_Player[m_CrosshairId + 0x4];
 	public:
 		int GetHealth() const;
 		int GetTeamNum() const;
 		int GetLifeState() const;
 		int GetShotsFired() const;
+		int GetCrosshairId() const;
 
 		vec3 GetOrigin() const;
 		vec3 GetVecView() const;

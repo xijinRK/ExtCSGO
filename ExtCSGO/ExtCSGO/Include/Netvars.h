@@ -5,6 +5,7 @@
 #define m_VecView 0x104
 #define m_VecOrigin 0x134
 #define m_LifeState 0x25B
+#define m_CrosshairId 0xAA70
 #define m_iShotsFired 0xA2C0
 #define	m_aimPunchAngle 0x301C
 #define m_BoneMatrix 0x2698

@@ -151,10 +151,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\Settings.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\Engine\Module.cpp" />
     <ClCompile Include="src\Engine\Process.cpp" />
     <ClCompile Include="src\Features\Aimbot.cpp" />
+    <ClCompile Include="src\Features\Triggerbot.cpp" />
     <ClCompile Include="src\Maths\Math.cpp" />
     <ClCompile Include="src\Maths\Vector.cpp" />
     <ClCompile Include="src\sdk\IClientEntityList.cpp" />
@@ -163,10 +165,10 @@
     <ClCompile Include="src\Update.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Settings.h" />
     <ClInclude Include="Include\Engine.h" />
-    <ClInclude Include="Include\Engine\Module.h" />
-    <ClInclude Include="Include\Engine\Process.h" />
-    <ClInclude Include="Include\Features\Aimbot.h" />
+    <ClInclude Include="Include\Engine\Memory.h" />
+    <ClInclude Include="Include\Features\Features.h" />
     <ClInclude Include="Include\Maths\Math.h" />
     <ClInclude Include="Include\Maths\Vector.h" />
     <ClInclude Include="Include\Netvars.h" />
@@ -174,6 +176,9 @@
     <ClInclude Include="Include\sdk\IVEngineClient.h" />
     <ClInclude Include="Include\sdk\Player.h" />
     <ClInclude Include="Include\Update.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.cfg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

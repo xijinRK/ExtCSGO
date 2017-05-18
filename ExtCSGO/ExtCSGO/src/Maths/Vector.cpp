@@ -21,6 +21,11 @@ namespace ExtCSGO
 	{
 	}
 
+	vec3::vec3(const float * v):
+		x(v[0]), y(v[1]), z(v[2])
+	{
+	}
+
 	vec3::~vec3()
 	{
 	}
@@ -151,6 +156,6 @@ namespace ExtCSGO
 
 	void GetArrayData(const char* Array, const int & dwOffset, void* buffer)
 	{
-		*(void**)buffer = (void*)*(void**)(Array + dwOffset);
+		*(void**)buffer = *(void**)( Array + dwOffset );
 	}
 }

@@ -1,5 +1,5 @@
 #include "Engine.h"
-#include "NetVars.h"
+#include "Settings.h"
 
 #define LIST_MODULES_32BIT 0x1
 #define LIST_MODULES_64BIT 0x2
@@ -9,11 +9,20 @@ namespace ExtCSGO
 {
 	using namespace sdk;
 	Engine::Engine() :
-		m_Process(new Process (
-		"C:/Program Files (x86)/Steam/steamapps/common/Counter-Strike Global Offensive/",
-		"csgo.exe",
-		"Counter-Strike: Global Offensive",
-		"-steam -freq 144 -novid") ),
+		m_Process
+		(
+			new Process
+			(
+				Settings::GetSettings()->m_GamePath,
+				"csgo.exe",
+				"Valve001",
+				std::string(
+				std::string(std::string("-steam ") +
+				std::string(Settings::GetSettings()->m_LaunchOptions))).c_str()
+			)
+		),
+
+
 		m_ClientDLL(new Module("client.dll", LIST_MODULES_32BIT)),
 		m_EngineDLL(new Module("engine.dll", LIST_MODULES_32BIT)),
 		m_IVEngineClient(new IVEngineClient()),
@@ -45,16 +54,14 @@ namespace ExtCSGO
 		return m_EngineDLL;
 	}
 
-	bool Engine::GetClient(IClientEntityList **EntityList) const
+	IClientEntityList *Engine::GetIClientEnt() const
 	{
-		*EntityList = m_IClientEntity;
-		return (m_IClientEntity > nullptr);
+		return m_IClientEntity;
 	}
 
-	bool Engine::GetIVEngine(IVEngineClient **IVEngine) const
+	IVEngineClient *Engine::GetIVEngine() const
 	{
-		*IVEngine = m_IVEngineClient;
-		return (m_IVEngineClient > nullptr);
+		return m_IVEngineClient;
 	}
 
 	void Engine::Update() const
@@ -68,12 +75,12 @@ namespace ExtCSGO
 		}
 		else
 		{
-			GetClientDLL()->Init(GetProcess()->GetProcess());
-			GetEngineDLL()->Init(GetProcess()->GetProcess());
+			GetClientDLL()->Init(GetProcess()->GetHandle());
+			GetEngineDLL()->Init(GetProcess()->GetHandle());
 
 			if (IsValid())
 			{
-				std::cout << "Process Found! Handle:" << m_Process->GetProcess() << std::endl;
+				std::cout << "Process Found! Handle:" << m_Process->GetHandle() << std::endl;
 			}
 		}
 	}

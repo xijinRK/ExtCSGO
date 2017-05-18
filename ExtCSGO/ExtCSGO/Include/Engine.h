@@ -1,11 +1,9 @@
 #pragma once
-#include "Engine\Process.h"
-#include "Engine\Module.h"
+#include "Engine\Memory.h"
 
 #include "sdk\Player.h"
 #include "sdk\IVEngineClient.h"
 #include "sdk\IClientEntityList.h"
-
 
 namespace ExtCSGO
 {
@@ -17,24 +15,23 @@ sdk::   IVEngineClient*    m_IVEngineClient;
 		Module*            m_ClientDLL;
 		Module*            m_EngineDLL;
 
-
-
 	public:
 		Engine();
 		~Engine();
 
-		Process*				GetProcess() const;
-		Module*					GetClientDLL() const;
-		Module*					GetEngineDLL() const;
+		Process*					GetProcess() const;
+		Module*						GetClientDLL() const;
+		Module*						GetEngineDLL() const;
 
-		bool GetClient(sdk::IClientEntityList** EntityList) const;
-		bool GetIVEngine(sdk::IVEngineClient** IVEngine) const;
+		sdk::IClientEntityList*		GetIClientEnt() const;
+		sdk::IVEngineClient*		GetIVEngine() const;
 
-		void		Update() const;
-		void		UpdateEvents();
-		bool		IsValid() const;
+		void						Update() const;
+		void						UpdateEvents();
+		bool						IsValid() const;
+
 	private:
-		bool		IsHandleValid() const;
-		bool		IsModuleValid() const;
+		bool						IsHandleValid() const;
+		bool						IsModuleValid() const;
 	};
 }

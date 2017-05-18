@@ -6,8 +6,8 @@ namespace ExtCSGO::sdk
 {
 
 	IClientEntityList::IClientEntityList() : 
-		m_Entity(new Player[32]),
-		m_Matrix(new s_matrix3x4[32])
+		m_Entity(new Player[MaxEntityIndex]),
+		m_Matrix(new s_matrix3x4[MaxEntityIndex])
 	{
 	}
 
@@ -29,7 +29,7 @@ namespace ExtCSGO::sdk
 
 	void IClientEntityList::Update(const Engine *engine) const
 	{
-		for (int i = 0; i < 32; i++)
+		for (int i = 0; i < MaxEntityIndex; i++)
 		{
 			static DWORD Ptr = 0;
 			if (!engine->GetProcess()->ReadMemory

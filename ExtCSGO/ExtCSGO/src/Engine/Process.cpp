@@ -1,28 +1,35 @@
-#include "Engine\Process.h"
+#include "Engine\Memory.h"
 #include <iostream>
 
 namespace ExtCSGO
 {
-	bool HandleIsValid(const HANDLE & ProcessHandle);
+	static bool HandleIsValid(const HANDLE & ProcessHandle);
 
-	bool WindowExists(const char * WindowName);
+	static bool WindowExists(const char * WindowClassName);
 
-	void CloseProcess(const char * ProcessName, const HANDLE & hProcess);
+	static void CloseProcess(const char * ProcessName, const HANDLE & hProcess);
 
-	bool NewProcess(
+	static bool NewProcess(
 		const char* ProcessPath,
 		const char* ProcessName,
 		const char* Arguments,
 		PHANDLE		ProcessHandle);
 
+	static bool DebugNewProcess(
+		const char* WindowClassName,
+		PHANDLE		ProcessHandle);
+
 	Process::Process(
 		const char* ProcessPath,
 		const char* ProcessName,
-		const char* WindowName,
+		const char* WindowClassName,
 		const char* ProcessArguments) :
 			m_ProcessPath(ProcessPath), m_ProcessName(ProcessName),
-			m_WindowName(WindowName), m_ProcessArguments(ProcessArguments)
+			m_WindowClassName(WindowClassName)
 	{
+		m_ProcessArguments = new char[strlen(ProcessArguments) + 1];
+		strcpy_s(m_ProcessArguments, strlen(ProcessArguments) + 1, ProcessArguments);
+
 		m_Process = nullptr;
 	}
 
@@ -30,7 +37,7 @@ namespace ExtCSGO
 	{
 	}
 
-	HANDLE Process::GetProcess() const
+	HANDLE Process::GetHandle() const
 	{
 		return m_Process;
 	}
@@ -42,20 +49,22 @@ namespace ExtCSGO
 
 	bool Process::Init()
 	{
+		#ifdef _DEBUG
+		return DebugNewProcess(m_WindowClassName, &m_Process);
+		#else
 		if (IsValid(PROCESS_WINDOW))
 		{
-			#ifdef _DEBUG 
-			#else
 			CloseProcess(m_ProcessName, m_Process);
 			m_Process = nullptr;
 			Sleep(5000);
-			#endif
 		}
 		else
 		{
 			m_Process = nullptr;
 		}
+
 		return NewProcess(m_ProcessPath, m_ProcessName, m_ProcessArguments, &m_Process);
+		#endif
 	}
 
 	bool Process::IsValid(const int & PROCESS_FLAGS) const
@@ -65,7 +74,7 @@ namespace ExtCSGO
 		{
 			case PROCESS_WINDOW:
 			{
-				status = WindowExists(m_WindowName);
+				status = WindowExists(m_WindowClassName);
 				break;
 			}
 
@@ -78,7 +87,7 @@ namespace ExtCSGO
 		return status;
 	}
 
-	bool HandleIsValid(const HANDLE & ProcessHandle)
+	static bool HandleIsValid(const HANDLE & ProcessHandle)
 	{
 		if (ProcessHandle == nullptr)
 			return false;
@@ -88,12 +97,12 @@ namespace ExtCSGO
 		return (ExitCode == STILL_ACTIVE);
 	}
 
-	bool WindowExists(const char * WindowName)
+	static bool WindowExists(const char * WindowClassName)
 	{
-		return (FindWindowA(0, WindowName) > nullptr);
+		return (FindWindowA(WindowClassName, nullptr) > nullptr);
 	}
 
-	void CloseProcess(const char * ProcessName, const HANDLE & hProcess)
+	static void CloseProcess(const char * ProcessName, const HANDLE & hProcess)
 	{
 		std::string CmdString = 
 		(
@@ -108,61 +117,55 @@ namespace ExtCSGO
 		}
 	}
 
-	bool NewProcess(
+	static bool NewProcess(
 		const char* ProcessPath,
 		const char * ProcessName,
 		const char* Arguments,
 		PHANDLE ProcessHandle)
 	{
-	#ifdef _DEBUG 
-		DWORD pid = 0;	
-		GetWindowThreadProcessId(FindWindowA("Valve001", nullptr), &pid);
-		if (pid == 0)
-		{
-			return false;
-		}
-
-		*ProcessHandle = OpenProcess(PROCESS_ALL_ACCESS, false, pid);
-
-		if (*ProcessHandle == nullptr)
-		{
-			return false;
-		}
-	#else
 		PROCESS_INFORMATION		pi = { 0 };
 		STARTUPINFOA			si = { 0 };
 								si.cb = sizeof(STARTUPINFO);
 								si.dwFlags = STARTF_USESHOWWINDOW;
 								si.wShowWindow = SW_HIDE;
 
-	
+		std::string PPath = ProcessPath;
+		PPath.erase(PPath.end() - 1);
+
 		std::string FullPath = std::string
 		(
-			ProcessPath + std::string("")	+
-			ProcessName + std::string(" ")	+
+			PPath +
+			std::string(ProcessName + std::string(" ")	+
 			Arguments
-		);
+		));
 
-		if (!CreateProcessA(
-			nullptr,
-			(LPSTR)FullPath.c_str(),
-			nullptr,
-			nullptr,
-			FALSE,
-			FALSE,
-			nullptr,
-			nullptr,
-			&si,
-			&pi))
+		if (!CreateProcessA (
+			nullptr, (LPSTR)FullPath.c_str(),
+			nullptr, nullptr, FALSE, FALSE,
+			nullptr, nullptr, &si, &pi))
 		{
+			std::cout << FullPath.c_str() << std::endl;
 			return false;
 		}
 
 		CloseHandle(pi.hThread);
 
 		*ProcessHandle = pi.hProcess;
-	#endif
 		return true;
+	}
+
+	static bool DebugNewProcess(
+		const char* WindowClassName,
+		PHANDLE		ProcessHandle)
+	{
+		DWORD ProcessId = FALSE;
+		GetWindowThreadProcessId(FindWindowA(WindowClassName, nullptr), &ProcessId);
+		if (ProcessId == FALSE)
+		{
+			return false;
+		}
+		*ProcessHandle = OpenProcess(PROCESS_ALL_ACCESS, false, ProcessId);
+		return (*ProcessHandle > nullptr);
 	}
 }
 

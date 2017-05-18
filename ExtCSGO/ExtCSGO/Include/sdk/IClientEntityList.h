@@ -8,6 +8,7 @@ namespace ExtCSGO
 	class vec3;
 }
 
+#define MaxEntityIndex 32
 namespace ExtCSGO::sdk
 {
 	class Player;

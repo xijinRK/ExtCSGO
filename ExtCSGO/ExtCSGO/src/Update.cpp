@@ -1,47 +1,66 @@
 #include "Update.h"
 
-#include <iostream>
 namespace ExtCSGO
 {
-	using namespace Features;
-	Update::Update(char* argv[]):
-		m_Aimbot(new Aimbot(std::atoi(argv[1]), std::atof(argv[2]), std::atoi(argv[3]), std::atof(argv[4]), this)),
-		m_Running(false)
+	static void UpdateThread(Update* update);
+	Update::Update() :
+		m_Enabled(false)
 	{
+		if (Settings::GetSettings()->LoadSettings())
+		{
+			m_Engine = new Engine();
+		}
+		else
+		{
+			exit(0);
+		}
 	}
 
 	Update::~Update()
 	{
-		delete m_Aimbot;
+		delete m_Engine;
+		Settings::DeleteSettings();
+	}
+
+	bool Update::IsEnabled() const
+	{
+		return m_Enabled;
+	}
+
+	void Update::SetEnabled(const bool & v)
+	{
+		m_Enabled = v;
 	}
 
 	int Update::Run()
 	{
-		CreateThread(0, 0, (LPTHREAD_START_ROUTINE)UpdateThread, (Update*)this, 0, 0);
+		auto hUpdate = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)UpdateThread, (Update*)this, 0, 0);
 		while (true)
 		{
 			Sleep(1);
-			if (m_Running == true)
+			if (this->IsEnabled())
 			{
-				if (Engine::IsValid())
+				if (m_Engine->IsValid())
 				{
-					m_Aimbot->Run();		
+					Features::Aimbot(m_Engine);
+					Features::Triggerbot(m_Engine);
 				}
 			}
 		}
+		CloseHandle(hUpdate);
 		return 0;
 	}
 
-	void UpdateThread(Update* update)
+	static void UpdateThread(Update* update)
 	{
 		while (true)
 		{
 			Sleep(1);
-			if (update->m_Running == true)
+			if (update->IsEnabled())
 			{ 
-				if (update->Engine::IsValid())
+				if (update->m_Engine->IsValid())
 				{
-					update->Engine::UpdateEvents();
+					update->m_Engine->UpdateEvents();
 				}
 				else
 				{
@@ -49,13 +68,14 @@ namespace ExtCSGO
 					#else
 					Sleep(5000);
 					#endif
-					update->Engine::Update();
+					update->m_Engine->Update();
 				}
 			}
 			if (GetAsyncKeyState(VK_INSERT) & 1)
 			{
-				update->m_Running = !update->m_Running;
+				update->SetEnabled(!update->IsEnabled());
 			}
 		}
+		return ExitThread(0);
 	}
 }

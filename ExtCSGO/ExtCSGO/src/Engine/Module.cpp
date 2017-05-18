@@ -1,14 +1,15 @@
-#include "Engine\Module.h"
+#include "Engine\Memory.h"
+
 #include <Psapi.h>
 #include <iostream>
+
 namespace ExtCSGO
 {
-	bool ExGetModuleHandle(
+	static bool ExGetModuleHandle(
 		const HANDLE &  hProcess,
 		const char*		ModuleName,
 		int				LIST_MODULES,
 		HMODULE*		hModule);
-
 
 	Module::Module(const char* ModuleName, const int & LIST_MODULES) : 
 		m_ModuleName(ModuleName),
@@ -46,8 +47,8 @@ namespace ExtCSGO
 		return ExGetModuleHandle(hProcess, m_ModuleName, m_ListModules, &m_BaseAddress);
 	}
 
-	bool ExGetModuleHandle(
-		const HANDLE &  hProcess,
+	static bool ExGetModuleHandle(
+		const HANDLE &	hProcess,
 		const char*		ModuleName,
 		int				LIST_MODULES,
 		HMODULE*		hModule)
@@ -79,6 +80,4 @@ namespace ExtCSGO
 
 		return true;
 	}
-
-
 }

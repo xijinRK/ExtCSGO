@@ -1,8 +1,6 @@
 #include <Update.h>
 
-int main(int argc, char* argv[])
+int main()
 {
-	if (argc < 5)
-		return 0;
-	return ExtCSGO::Update(argv).Run();
+	return ExtCSGO::Update().Run();
 }
