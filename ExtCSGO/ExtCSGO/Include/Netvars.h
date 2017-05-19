@@ -10,7 +10,6 @@
 #define	m_aimPunchAngle 0x301C
 #define m_BoneMatrix 0x2698
 #define m_GetLocalPlayer 0x178
-#define m_EntityList 0x4A6DA5C
+#define m_EntityList 0x4A70174
 #define m_ViewAngles 0x4D0C
-#define m_ClientState 0x5A29FC
-#define m_SensitivityPtr 0xA51C40
+#define m_ClientState 0x59D114

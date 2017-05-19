@@ -1,8 +1,11 @@
 #include "Update.h"
-
+#include <thread>
 namespace ExtCSGO
 {
 	static void UpdateThread(Update* update);
+	static bool ThreadIsRunning(const HANDLE & hThread);
+	static bool ConsoleIsRunning();
+
 	Update::Update() :
 		m_Settings(new Settings()),
 		m_Engine(new Engine(m_Settings)),
@@ -39,7 +42,7 @@ namespace ExtCSGO
 	int Update::Run()
 	{
 		auto hUpdate = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)UpdateThread, (Update*)this, 0, 0);
-		while (true)
+		while (ThreadIsRunning(hUpdate) && ConsoleIsRunning())
 		{
 			Sleep(1);
 			if (this->IsEnabled())
@@ -50,7 +53,8 @@ namespace ExtCSGO
 					Features::Triggerbot(m_Engine, m_Settings);
 				}
 			}
-		}
+		}	
+		TerminateThread(hUpdate, EXIT_SUCCESS);
 		CloseHandle(hUpdate);
 		return 0;
 	}
@@ -80,6 +84,30 @@ namespace ExtCSGO
 				update->SetEnabled(!update->IsEnabled());
 			}
 		}
-		return ExitThread(0);
+		return ExitThread(EXIT_SUCCESS);
+	}
+
+	static bool ThreadIsRunning(const HANDLE & hThread)
+	{
+		if (hThread == nullptr)
+		{
+			return false;
+		}
+		DWORD ThreadStatus;
+		GetExitCodeThread(hThread, &ThreadStatus);
+		return (ThreadStatus == STILL_ACTIVE);
+	}
+
+	static DWORD UpdateMessage = 0;
+	static BOOL WINAPI ConsoleHandlerRoutine(DWORD dwCtrlType)
+	{
+		UpdateMessage = dwCtrlType;
+		return (dwCtrlType == CTRL_CLOSE_EVENT) ? TRUE : FALSE;
+	}
+
+	static bool ConsoleIsRunning()
+	{
+		static auto ConHandler = SetConsoleCtrlHandler(ConsoleHandlerRoutine, TRUE);
+		return (UpdateMessage != CTRL_CLOSE_EVENT);
 	}
 }
