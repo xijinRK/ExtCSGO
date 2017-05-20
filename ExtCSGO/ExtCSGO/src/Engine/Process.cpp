@@ -86,7 +86,9 @@ namespace ExtCSGO
 	static bool HandleIsValid(const HANDLE & ProcessHandle)
 	{
 		if (ProcessHandle == nullptr)
+		{
 			return false;
+		}
 
 		DWORD ExitCode;
 		GetExitCodeProcess(ProcessHandle, &ExitCode);
